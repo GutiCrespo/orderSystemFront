@@ -13,28 +13,38 @@ interface Order {
 export default function Home() {
 
     const [orders, setOrders] = useState<Order[]>([])
-    const [isFilterOn, setIsFilterOn] = useState(false)
-    const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
     const [clickPhrase, setClickPhrase] = useState<string>("Add your first order")
     const [isModalOpen, setIsModalOpen] = useState(false)
+    
+    //  Filters:
+    const [isFilterOn, setIsFilterOn] = useState(false)
+    const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
+    const [currentFilterState, setCurrentFilterState] = useState<string | undefined>(undefined);
+    const [currentFilterId, setCurrentFilterId] = useState<number | undefined>(undefined);
+
 
     
     const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL
     
     useEffect(() => {
         getOrders()
-        getRandomPhrase()        
+        getRandomPhrase()   
+        console.log("API URL:", apiUrl);
+     
     }, [])
     
     // GET orders from API
     async function getOrders(){
         try {
-            const res = await fetch(`${apiUrl}/orders`)
+            // Test to debug:
+            const res = await fetch("http://localhost:4444/orders");
+            // const res = await fetch(`${apiUrl}/orders`)
+            
             const data = await res.json()
             console.log(`Requisição na API GET: resposta ${data}`); 
             
             setOrders(data)
-            console.log(`Get feito com sucesso! ${orders}`)
+            console.log(`Get success! ${orders}`)
             setIsFilterOn(false)
         } catch (err) {
             console.error("Error fetching orders:", err)                
@@ -48,28 +58,56 @@ export default function Home() {
                 method: "POST",
             })
             const data = await res.json()
-            console.log(`Post feito com sucesso! ${data}`)
+            console.log(`Post success! ${data}`)
             getOrders()
             getRandomPhrase()
             
         } catch (error) {
-            console.error("Erro ao enviar dados:", error);
+            console.error("Error fetching orders:", error);
         }
     }
 
-    // UPDATE order state in API
     async function updateOrder(id: number) {
         try {
             const res = await fetch(`${apiUrl}/orders/${id}`, {
                 method: "PUT",
+            });
+    
+            const data: Order = await res.json();
+            console.log(`Order ${id} updated!`, data);
+            
+            if (orders.length <=1 ){
+                console.log(orders.length);
+                getOrders();
+            }
+            if (isFilterOn) {
+                console.log("Filter active");
+                filterOrders(currentFilterState, currentFilterId)
+            } else {
+                getOrders();
+                console.log("Filter off");
+            }
+        } catch (error) {
+            console.error(`Error updating order ${id}:`, error);
+        }
+    }
+
+    // DELETE all orders 
+    async function handleDeleteAll() {
+        try {
+            const res = await fetch(`${apiUrl}/orders/delete-all`, {
+            method: "DELETE",
             })
 
-            const data: Order = await res.json();
-            console.log(`Pedido ${id} atualizado!`, data);
+            if (!res.ok) {
+                throw new Error("Failed to delete all orders");
+            }
+            
+            console.log(`Orders deleted! ${res}`);
             getOrders()
             
         } catch (error) {
-            console.error(`Erro ao atualizar o pedido ${id}:`, error);
+            console.error("Error deleting orders:", error);
         }
     }
 
@@ -84,11 +122,13 @@ export default function Home() {
         try {
             let url = `${apiUrl}/orders/filter`
 
+            setCurrentFilterState(filterState)
+            setCurrentFilterId(filterId)
+
             // Logic to apply the filters inside the requisition.
-            // the filters are expecting "?id=[num]", if it is filtered by id
-            // the filters are expecting "?state=[state]", if it is filtered by state
-            // and the filters are expecting "?state=[state]&id=[num]", with the "state"
-            // first, to filtered using both
+            // "?id=[num]", if it is filter by id
+            // "?state=[state]", if it is filter by state
+            // "?state=[state]&id=[num]", with the "state" first, to filter using both
             if (filterState || filterId) {
                 url += "?"
                 if (filterState) {url += `state=${filterState}`} 
@@ -98,8 +138,8 @@ export default function Home() {
             const res = await fetch(url);
             const data: Order[] = await res.json();
             setOrders(data);
-            console.log("Pedidos filtrados:", data);
-            setIsFilterOn(true)
+            console.log("Filtered orders:", data);
+            setIsFilterOn(true);
         } catch (error) {
             console.error("Error filtering the orders:", error);
         }
@@ -171,6 +211,18 @@ export default function Home() {
                 )}
                 </div>
             </div>
+
+            {orders.length > 4 && (
+                            
+                            <div className="w-full flex flex-col items-center">
+                                <button 
+                                    className=" mt-4 flex gap-2 px-3 py-1 text-[#050505] rounded-md items-center opacity-50"
+                                    onClick={() => handleDeleteAll()}
+                                    >
+                                    <p className="text-xs sm:text-sm md:text-base">Clear orders</p>
+                                </button>
+                            </div>
+            )}
 
             {/* Filter modal */}
             <FilterModal 
