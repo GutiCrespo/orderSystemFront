@@ -6,7 +6,12 @@ This frontend application provides an interface for managing orders, interacting
 
 ## Running the Project  
 
-This frontend needs to be run locally. Follow the steps below to set it up:
+The frontend is already deployed and running in the cloud, making it easy to use without any setup.  
+You can access it at:
+
+**Live URL:** [`https://order-system-front.vercel.app`](https://order-system-front.vercel.app)
+
+If you prefer to run the application locally, follow the steps below:
 
 ### 1. Clone the repository
 ```sh

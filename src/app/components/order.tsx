@@ -8,7 +8,7 @@ interface OrderProps {
 
 export default function Order({order, updateOrder}: OrderProps) {
 
-    let currentState = order.state
+    const currentState = order.state
     let colorButton = ""
     let textButton = ""
     let textButtonOpacity = ""
