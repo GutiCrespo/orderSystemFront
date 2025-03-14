@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Order Management Frontend
 
-## Getting Started
+This frontend application provides an interface for managing orders, interacting directly with the backend API. It allows users to **create, update, and filter** orders efficiently. The project was developed as part of a technical assessment and is not intended for professional or commercial use.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Running the Project  
+
+This frontend needs to be run locally. Follow the steps below to set it up:
+
+### 1. Clone the repository
+```sh
+git clone https://github.com/GutiCrespo/orderSystemFront
+cd orderSystemFront
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install dependencies
+```sh
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Configure environment variables
+Create a `.env` file in the root directory based on `.env.example`.  
+Make sure to set `NEXT_PUBLIC_API_BASE_URL` to the correct backend URL.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- If using the cloud API:
+```ini
+NEXT_PUBLIC_API_BASE_URL="https://order-system-api.vercel.app"
+```
+- If running the API locally:
+```ini
+NEXT_PUBLIC_API_BASE_URL="http://localhost:4444"
+```
 
-## Learn More
+### 4. Start the frontend
+```sh
+npm run dev
+```
+The application will be available at [`http://localhost:3000`](http://localhost:3000).
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tools Used
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Next.js
+Next.js is a React framework that enables server-side rendering (SSR) and static site generation (SSG). It simplifies routing, improves performance, and enhances SEO. It was chosen for its scalability and industry adoption.
 
-## Deploy on Vercel
+### React
+A JavaScript library for building interactive UIs. It provides a component-based architecture, making the frontend modular and maintainable.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### TypeScript
+TypeScript is a superset of JavaScript that adds static typing. It helps catch errors early and improves code maintainability.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Tailwind CSS
+A utility-first CSS framework that simplifies styling with pre-defined classes. It speeds up development and ensures a consistent design without requiring custom stylesheets.
+
+---
+
+## Potential Improvements
+
+This frontend was designed to be simple, focusing on core functionalities. However, there are several improvements that could be implemented:
+
+### Additional Features
+- Implementing **gamification elements**, such as rewarding users for frequent order creation.
+- Adding **hidden buttons** for experimental or extended functionalities beyond "Create, Update, and Filter."
+
+### Deployment
+Currently, the frontend runs only locally. Deploying it on **Vercel**, just like the backend, would make it easier to access and test.
+
+---
+
+## Backend Repository
+
+If you want to check out the backend implementation of this project, visit the repository:  
+**[Order System API](https://github.com/GutiCrespo/orderSystemAPI.git)**
+
+---
+
+## Alternative Technologies
+
+Initially, the project was developed in **Ruby on Rails** due to its **MVC structure, rapid CRUD development, and maintainability**. However, since I was unfamiliar with it, I decided to switch to **Next.js and React** to ensure I could deliver a functional frontend within the available time frame.  
+If you are interested, you can check out the initial Ruby on Rails implementation here:  
+**[Ruby on Rails Version](https://github.com/GutiCrespo/orderSystem.git)**

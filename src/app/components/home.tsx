@@ -27,11 +27,12 @@ export default function Home() {
     const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL
     
     useEffect(() => {
-        getOrders()
-        getRandomPhrase()   
-        console.log("API URL:", apiUrl);
-     
-    }, [])
+        if (typeof window !== "undefined") {
+            getOrders();
+            getRandomPhrase();
+            console.log("API URL:", apiUrl);
+        }
+    }, []);
     
     // GET orders from API
     async function getOrders(){
