@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Order from "./order";
 import phrasesData from "./click-phrases.json"
 import FilterModal from "./modalFilter";
+import Image from "next/image";
 
 interface Order {
     id: number;
@@ -14,7 +15,6 @@ export default function Home() {
 
     const [orders, setOrders] = useState<Order[]>([])
     const [clickPhrase, setClickPhrase] = useState<string>("Add your first order")
-    const [isModalOpen, setIsModalOpen] = useState(false)
     
     //  Filters:
     const [isFilterOn, setIsFilterOn] = useState(false)
@@ -27,19 +27,15 @@ export default function Home() {
     const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL
     
     useEffect(() => {
-        if (typeof window !== "undefined") {
-            getOrders();
-            getRandomPhrase();
-            console.log("API URL:", apiUrl);
-        }
-    }, []);
+        getOrders();
+        getRandomPhrase();
+        console.log("API URL:", apiUrl);
+    }, [apiUrl]);    
     
     // GET orders from API
     async function getOrders(){
         try {
-            // Test to debug:
-            const res = await fetch("http://localhost:4444/orders");
-            // const res = await fetch(`${apiUrl}/orders`)
+            const res = await fetch(`${apiUrl}/orders`)
             
             const data = await res.json()
             console.log(`Requisição na API GET: resposta ${data}`); 
@@ -182,11 +178,13 @@ export default function Home() {
             </header>
 
             <div className="Orders Painel mt-6 sm:flex sm:flex-col sm:items-center sm:justify-center">
-                <img
-                        src="/illustrationAsset.png" 
-                        alt="Illustration of Order System"
-                        className="w-full max-w-28 sm:max-w-36 md:max-w-56 mx-auto relative top-2 sm:top-2 md:top-2"
-                    />
+                <Image
+                    src="/illustrationAsset.png"
+                    alt="Illustration of Order System"
+                    width={200}
+                    height={200}
+                    className="w-full max-w-28 sm:max-w-36 md:max-w-56 mx-auto relative top-2 sm:top-2 md:top-2"
+                />
                 <div className="bg-[#F6F5F4] rounded-xl min-h-32 h-fit p-4 flex flex-col justify-center items-center gap-4 sm:px-10 sm:w-10/12">
                     {orders.length > 0 ? (
                         orders.map((order) => 
